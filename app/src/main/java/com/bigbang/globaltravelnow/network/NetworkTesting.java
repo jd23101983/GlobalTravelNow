@@ -40,7 +40,7 @@ public class NetworkTesting {
 
         //new request object - method chaining
         Request request = new Request.Builder()
-                .url("https://www.travel-advisory.info/api?countrycode=AU")
+                .url("https://www.travel-advisory.info/api?countrycode=GB")
                 .build();
 
         //make a request from a Call class
@@ -53,20 +53,6 @@ public class NetworkTesting {
 
             }
 
-/*
-            JSONObject forecast= new JSONObject(jsonData);
-            String timezone = forecast.getString("timezone");
-            Log.i(TAG, "FROM JSON: " + timezone);
-            JSONObject currently = new JSONObject("currently");
-            CurrentWeather currentWeather = new CurrentWeather();
-            currentWeather.setHumidity(currently.getDouble("humidity"));
-{
-		  "api_status": {
-			"request": {
-			  "item": "de"
-			},
-			"reply": {
- */
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {

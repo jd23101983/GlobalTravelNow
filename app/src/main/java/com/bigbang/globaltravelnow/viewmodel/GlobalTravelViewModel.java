@@ -44,6 +44,8 @@ public class GlobalTravelViewModel extends AndroidViewModel {
         return countriesArray;
     }
 
+    public String getCountryCode(String countryName) { return countriesMap.get(countryName); }
+
     public Observable<Result> getGlobalTravelData(String countryNameCode) {
         return  globalTravelRetrofitInstance
                 .getGlobalTravelData(countriesMap.get(countryNameCode))
