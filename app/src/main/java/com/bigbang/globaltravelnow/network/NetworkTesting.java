@@ -40,7 +40,7 @@ public class NetworkTesting {
 
         //new request object - method chaining
         Request request = new Request.Builder()
-                .url("https://www.travel-advisory.info/api?countrycode=DE")
+                .url("https://www.travel-advisory.info/api?countrycode=AU")
                 .build();
 
         //make a request from a Call class

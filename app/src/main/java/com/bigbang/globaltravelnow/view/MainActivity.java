@@ -3,10 +3,7 @@ package com.bigbang.globaltravelnow.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -17,23 +14,18 @@ import com.bigbang.globaltravelnow.model.Result;
 import com.bigbang.globaltravelnow.util.DebugLogger;
 import com.bigbang.globaltravelnow.viewmodel.GlobalTravelViewModel;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.Response;
-
-import org.springframework.web.client.RestTemplate;
-
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MainActivity extends AppCompatActivity {
 
     GlobalTravelViewModel globalTravelViewModel;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    TravelAdvisoryOneFragment travelAdvisoryOneFragment;
 
     @BindView(R.id.earth_image)
     ImageView earthImageView;
@@ -48,25 +40,42 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         globalTravelViewModel = ViewModelProviders.of(this).get(GlobalTravelViewModel.class);
+        Glide.with(this).load(R.drawable.earth).into(earthImageView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, globalTravelViewModel.getCountriesArray());
+        countrySpinner.setAdapter(adapter);
 
-        compositeDisposable.add(globalTravelViewModel.getGlobalTravelData("New Zealand").subscribe(globalTravelResult -> {
+        travelAdvisoryOneFragment = new TravelAdvisoryOneFragment();
+    }
+
+    @OnClick(R.id.get_country_data_button)
+    public void getCountryData() {
+        compositeDisposable.add(globalTravelViewModel.getGlobalTravelData(countrySpinner.getSelectedItem().toString())
+                .subscribe(globalTravelResult -> {
             displayInformationRx(globalTravelResult);
         }, throwable -> {
             DebugLogger.logError(throwable);
         }));
-
-        Glide.with(this).load(R.drawable.earth).into(earthImageView);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, globalTravelViewModel.getCountriesArray());
-        countrySpinner.setAdapter(adapter);
     }
 
+    public void displayInformationRx(Result globalTravelResult) {
 
+        travelAdvisoryOneFragment.setTravelAdvisoryResult(globalTravelResult);
 
-    public void displayInformationRx(Result result) {
-        String countryCode = result.getData().getCode().getCountry();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.travel_advisory_frame, travelAdvisoryOneFragment)
+                .commit();
+
+        String countryCode = globalTravelResult.getData().getCode().getCountry();
         Log.d("TAG_X", "result: name: " + countryCode);
-        Log.d("TAG_X", "request: item: " + result.getData().getSituation().getRating());
-        Log.d("TAG_X", "request: item: " + result.getData().getLang().getEn().getAdvice());
+        Log.d("TAG_X", "request: item: " + globalTravelResult.getData().getSituation().getRating());
+        Log.d("TAG_X", "request: item: " + globalTravelResult.getData().getLang().getEn().getAdvice());
+    }
+
+    public void returnFromAdvisory() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .remove(travelAdvisoryOneFragment)
+                .commit();
     }
 }
