@@ -60,7 +60,7 @@ public class GlobalTravelViewModel extends AndroidViewModel {
     }
 
     public void setupContinentArray() {
-        continentArray = new ArrayList<>(Arrays.asList("Africa","North America","South America","Europe","Asia","Antarctica","Australia"));
+        continentArray = new ArrayList<>(Arrays.asList("Africa","North America","South America","Europe","Asia","Antarctica","Oceania"));
     }
 
     public ArrayList<CountryContinent> getCountryContinentArray() {
