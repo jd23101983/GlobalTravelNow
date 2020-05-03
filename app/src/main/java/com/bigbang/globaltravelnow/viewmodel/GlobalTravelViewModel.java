@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import com.bigbang.globaltravelnow.model.Result;
 import com.bigbang.globaltravelnow.network.GlobalTravelRetrofitInstance;
-import com.bigbang.globaltravelnow.network.NetworkTesting;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +20,12 @@ public class GlobalTravelViewModel extends AndroidViewModel {
     private Map<String, String> countriesMap;
     private List<String> countriesArray;
     private GlobalTravelRetrofitInstance globalTravelRetrofitInstance;
-    private NetworkTesting networkTesting = new NetworkTesting();
 
     public GlobalTravelViewModel(@NonNull Application application) {
         super(application);
 
         setupCountryMapAndArray();
         globalTravelRetrofitInstance = new GlobalTravelRetrofitInstance();
-        networkTesting.doTest();
     }
 
     public void setupCountryMapAndArray() {
